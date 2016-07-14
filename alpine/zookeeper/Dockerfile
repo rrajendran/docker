@@ -6,7 +6,8 @@ RUN curl -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/zookeeper/zookeeper
 	&& tar -xvf zookeeper-$ZOOKEEPER_VERSION.tar.gz \
 	&& mv zookeeper-$ZOOKEEPER_VERSION $ZOOKEEPER_HOME \
 	&& cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
-	&& rm -rf zookeeper-$ZOOKEEPER_VERSION.tar.gz
+	&& rm -rf zookeeper-$ZOOKEEPER_VERSION.tar.gz \
+	&& mkdir -p /tmp/zookeeper
 
 EXPOSE 2181 2888 3888
 
