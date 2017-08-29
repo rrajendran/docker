@@ -4,13 +4,17 @@ RUN apk add --update curl && \
 	rm -rf /var/cache/apk/*
 # Java Version and other ENV
 ENV JAVA_VERSION_MAJOR=8 \
-    JAVA_VERSION_MINOR=92 \
-    JAVA_VERSION_BUILD=14 \
+    JAVA_VERSION_MINOR=144 \
+    JAVA_VERSION_BUILD=01 \
     JAVA_PACKAGE=jdk \
-    JAVA_HOME=/opt/jdk \
-    PATH=${PATH}:/opt/jdk/bin \
-    GLIBC_VERSION=2.23-r3 \
+    JAVA_HASH=090f390dda5b47b9b721c7dfaa008135 \
+    ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
+    GLIBC_VERSION="2.25-r0"
+
+ENV JAVA_HOME=/opt/${JAVA_PACKAGE} \
+    PATH=${PATH}:/opt/${JAVA_PACKAGE}/bin \
     LANG=C.UTF-8
+
 
 # do all in one step
 RUN apk upgrade --update && \
@@ -22,7 +26,7 @@ RUN apk upgrade --update && \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
     /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
     mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/java.tar.gz \
-    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
+    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_HASH}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
     gunzip /tmp/java.tar.gz && \
     tar -C /opt -xf /tmp/java.tar && \
     apk del glibc-i18n && \
@@ -61,4 +65,4 @@ RUN apk upgrade --update && \
            /opt/jdk/jre/lib/plugin.jar \
            /tmp/* /var/cache/apk/* && \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
-CMD ["java","-version"]
+
