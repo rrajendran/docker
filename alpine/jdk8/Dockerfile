@@ -8,7 +8,6 @@ ENV JAVA_VERSION_MAJOR=8 \
     JAVA_VERSION_BUILD=01 \
     JAVA_PACKAGE=jdk \
     JAVA_HASH=090f390dda5b47b9b721c7dfaa008135 \
-    ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     GLIBC_VERSION="2.25-r0"
 
 ENV JAVA_HOME=/opt/${JAVA_PACKAGE} \

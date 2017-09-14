@@ -1,0 +1,13 @@
+portal:
+  image: nginx
+  volumes:
+     - ./default.conf:/etc/nginx/conf.d/default.conf
+  ports:
+   - "80:80"
+  links:
+   - tomcatOne:spring1
+   - tomcatTwo:spring2
+tomcatOne:
+  image: spring-mvc-example
+tomcatTwo:
+  image: spring-mvc-example

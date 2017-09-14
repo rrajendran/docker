@@ -1,0 +1,17 @@
+traefik:
+  image: traefik
+  command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+  ports:
+    - "9091:80"
+    - "8081:8080"
+    - "8443:443"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /dev/null:/traefik.toml
+machine:
+  image: spring-mvc-example
+  ports:
+    - "9090:8080"
+  labels:
+    - "traefik.backend=machine-echo"
+    - "traefik.frontend.rule=Host:machine-echo.example.com"

@@ -1,0 +1,1 @@
+docker run -d -p 9090:8080 -p 9080:80 -v $PWD/traefik.toml:/etc/traefik/traefik.toml -v /var/run/docker.sock:/var/run/docker.sock traefik 

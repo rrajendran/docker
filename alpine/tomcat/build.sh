@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-docker build -t rameshr/alpine-tomcat8:latest .
-docker push rameshr/alpine-tomcat8:latest
+docker build -t rameshr/tomcat:latest .
+docker push rameshr/tomcat:latest

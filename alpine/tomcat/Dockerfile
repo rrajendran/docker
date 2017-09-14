@@ -4,19 +4,22 @@ ENV TOMCAT_MAJOR=8 \
     TOMCAT_VERSION=8.5.20 \
     TOMCAT_HOME=/opt/tomcat \
     CATALINA_HOME=/opt/tomcat \
-    CATALINA_OUT=/dev/null
+    CATALINA_OUT=/dev/null \
+    PATH=$PATH:$CATALINA_HOME/bin
 
-COPY docker-entrypoint.sh /
+ADD docker-entrypoint.sh /
+ADD tomcat-users.xml /
 
 RUN apk upgrade --update && \
-    apk add --update curl && \
+    apk add --update  --no-cache --virtual .fetch-dep ca-certificates openssl curl && \
     curl -jksSL -o /tmp/apache-tomcat.tar.gz http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
     gunzip /tmp/apache-tomcat.tar.gz && \
     tar -C /opt -xf /tmp/apache-tomcat.tar && \
-    ln -s /opt/apache-tomcat-${TOMCAT_VERSION} ${TOMCAT_HOME} && \
-    apk del curl && \
-    rm -rf /tmp/* /var/cache/apk/*
-
+    mv /opt/apache-tomcat-${TOMCAT_VERSION} ${CATALINA_HOME} && \
+    mv tomcat-users.xml ${CATALINA_HOME}/conf && \
+    rm -rf /tmp/* ${CATALINA_HOME}/webapps/docs ${CATALINA_HOME}/webapps/examples /var/cache/apk/*
 
 VOLUME ["/logs"]
 EXPOSE 8080
+
+ENTRYPOINT ["sh","./docker-entrypoint.sh"]
